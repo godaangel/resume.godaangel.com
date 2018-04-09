@@ -37,6 +37,9 @@ app.use('/', index);
 var exportToWord = require('./routes/resume/api/exportToWord');
 app.use('/resume/export/word', exportToWord);
 
+var addResume = require('./routes/resume/api/addResume');
+app.use('/resume/add', addResume);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

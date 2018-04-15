@@ -40,6 +40,18 @@ app.use('/resume/export/word', exportToWord);
 var addResume = require('./routes/resume/api/addResume');
 app.use('/resume/add', addResume);
 
+var getResumeList = require('./routes/resume/api/getResumeList');
+app.use('/resume/list', getResumeList);
+
+var getResumeById = require('./routes/resume/api/getResumeById');
+app.use('/resume/detail', getResumeById);
+
+var updateResumeById = require('./routes/resume/api/updateResumeById');
+app.use('/resume/update', updateResumeById);
+
+var deleteResume = require('./routes/resume/api/deleteResume');
+app.use('/resume/delete', deleteResume);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

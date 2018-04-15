@@ -18,16 +18,12 @@ var responseJSON = function(res, ret) {
   }
 };
 router.post('/', function(req, res, next) {
-  // responseJSON(res, {
-  //   code: 200,
-  //   msg: 'ok'
-  // });
-  // return false;
+
   pool.getConnection(function(err, connection) {
     var param = req.body;
     var timestamp = new Date().getTime();
-    connection.query(resumeSql.insert, [param.username, param.sex, param.born, param.id_card, param.nation, param.school, param.major, param.education, param.degree, param.political, param.work_year, param.title, param.position, param.department, param.program_list, param.education_list, param.work_list, timestamp], function(err, result) {
-      // console.log(result,err);
+    connection.query(resumeSql.insert, [param.username, param.sex, param.born, param.id_card, param.nation, param.school, param.major, param.education, param.degree, param.political, param.work_year, param.title, param.position, param.department, param.program_list, param.education_list, param.work_list, timestamp, timestamp], function(err, result) {
+      console.log(err)
       if (result) {
         result = {
           code: 200,

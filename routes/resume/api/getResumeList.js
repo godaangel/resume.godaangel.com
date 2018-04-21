@@ -25,12 +25,14 @@ router.post('/', function(req, res, next) {
     return new Promise((resolve, reject) => {
       var pageSize = param.page_size?param.page_size:20;
       connection.query(resumeSql.queryAll, [(param.current_page?(param.current_page - 1):0)*pageSize, pageSize], function(err, result) {
+        console.log(err)
         if (result) {
           var list = result;
           resolve(list);
         }else{
           reject();
         }
+        // connection.release();
       });
     });
   }
@@ -58,6 +60,7 @@ router.post('/', function(req, res, next) {
           };
         }
         resolve(result);
+        // connection.release();
       });
     });
   }
@@ -78,12 +81,13 @@ router.post('/', function(req, res, next) {
       let reportList = await getResumeList(connection, param);
       let result = await getTotal(connection, reportList, param);
       responseJSON(res, result);
-      connection.release();
+      
     }
 
     getMyList().catch((result) => {
+      console.log(result);
       responseJSON(res, result);
-      connection.release();
+      // connection.release();
     });
   });
 });

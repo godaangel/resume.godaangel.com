@@ -21,15 +21,28 @@ router.post('/', function(req, res, next) {
   /**
    * 获取简历列表
    */
-  function getResumeList(connection, param){
+  function getResumeList(connection, param) {
     return new Promise((resolve, reject) => {
-      var pageSize = param.page_size?param.page_size:20;
-      connection.query(resumeSql.queryAll, [(param.current_page?(param.current_page - 1):0)*pageSize, pageSize], function(err, result) {
+      let hasParams = (param.username || param.department) || false;
+
+      var pageSize = param.page_size ? param.page_size : 20;
+      let querySql = hasParams ? resumeSql.queryByUsername : resumeSql.queryAll;
+      let queryParams = [(param.current_page ? (param.current_page - 1) : 0) * pageSize, pageSize];
+      if(hasParams) {
+        let department = `%${param.department || ''}%`;
+        queryParams.unshift(department);
+
+        let username = `%${param.username || ''}%`;
+        queryParams.unshift(username);
+      }
+
+      console.log(querySql, queryParams)
+      connection.query(querySql, queryParams, function(err, result) {
         console.log(err)
         if (result) {
           var list = result;
           resolve(list);
-        }else{
+        } else {
           reject();
         }
         // connection.release();
@@ -40,11 +53,11 @@ router.post('/', function(req, res, next) {
   /**
    * 获取简历总数
    */
-  function getTotal(connection, list, param){
+  function getTotal(connection, list, param) {
     return new Promise((resolve, reject) => {
-      var pageSize = param.page_size?param.page_size:20;
+      var pageSize = param.page_size ? param.page_size : 20;
       connection.query('select found_rows() as total', function(err, result) {
-        if(result){
+        if (result) {
           var total = result[0].total || 0;
           result = {
             code: 200,
@@ -52,7 +65,7 @@ router.post('/', function(req, res, next) {
             data: {
               list: list,
               pagination: {
-                current_page: param.current_page?parseInt(param.current_page):0,
+                current_page: param.current_page ? parseInt(param.current_page) : 0,
                 page_size: pageSize,
                 total: total
               }
@@ -81,7 +94,7 @@ router.post('/', function(req, res, next) {
       let reportList = await getResumeList(connection, param);
       let result = await getTotal(connection, reportList, param);
       responseJSON(res, result);
-      
+
     }
 
     getMyList().catch((result) => {

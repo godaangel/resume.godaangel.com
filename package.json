@@ -10,7 +10,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "docx-templates": "^2.4.0",
+    "docx-templates": "^2.4.1",
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",

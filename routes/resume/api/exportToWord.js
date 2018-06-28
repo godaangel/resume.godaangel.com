@@ -26,6 +26,7 @@ router.post('/', function(req, res, next) {
       if(result){
         wordTemplate(res, result)
         .then((url) => {
+          connection.release();
           responseJSON(res, {
             code: '200',
             msg: 'ok',
@@ -36,12 +37,12 @@ router.post('/', function(req, res, next) {
         })
         .catch((err) => {
           console.log(err);
+          connection.release();
           responseJSON(res);
         })
       }else{
         console.log(err);
       }
-      connection.release();
     });
   });
 });

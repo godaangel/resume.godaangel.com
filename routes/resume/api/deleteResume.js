@@ -25,8 +25,8 @@ router.post('/', function(req, res, next) {
           msg: 'ok'
         }
       }
-      responseJSON(res, result2);
       connection.release();
+      responseJSON(res, result2);
     });
   });
 });

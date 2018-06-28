@@ -52,6 +52,15 @@ app.use('/resume/update', updateResumeById);
 var deleteResume = require('./routes/resume/api/deleteResume');
 app.use('/resume/delete', deleteResume);
 
+var saveArticle = require('./routes/article/api/save');
+app.use('/article/save', saveArticle);
+
+var infoArticle = require('./routes/article/api/info');
+app.use('/article/info', infoArticle);
+
+var listArticle = require('./routes/article/api/list');
+app.use('/article/list', listArticle);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

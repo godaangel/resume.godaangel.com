@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var dbConfig = require('../../../db/DBConfig');
-var resumeSql = require('../../../db/resume/resumeSql');
+var articleSql = require('../../../db/article/articleSql');
 
 var pool = mysql.createPool(dbConfig.mysql);
 var responseJSON = function(res, ret) {
@@ -21,19 +21,16 @@ router.post('/', function(req, res, next) {
   /**
    * 获取简历列表
    */
-  function getResumeList(connection, param) {
+  function getArticleList(connection, param) {
     return new Promise((resolve, reject) => {
-      let hasParams = (param.username || param.department) || false;
+      let hasParams = (param.title) || false;
 
       var pageSize = param.page_size ? param.page_size : 20;
-      let querySql = hasParams ? resumeSql.queryByUsername : resumeSql.queryAll;
+      let querySql = hasParams ? articleSql.queryByTitle : articleSql.queryAll;
       let queryParams = [(param.current_page ? (param.current_page - 1) : 0) * pageSize, pageSize];
       if(hasParams) {
-        let department = `%${param.department || ''}%`;
-        queryParams.unshift(department);
-
-        let username = `%${param.username || ''}%`;
-        queryParams.unshift(username);
+        let title = `%${param.title || ''}%`;
+        queryParams.unshift(title);
       }
 
       console.log(querySql, queryParams)
@@ -91,11 +88,10 @@ router.post('/', function(req, res, next) {
      * @DateTime 2018-03-11
      */
     let getMyList = async function() {
-      let reportList = await getResumeList(connection, param);
+      let reportList = await getArticleList(connection, param);
       let result = await getTotal(connection, reportList, param);
       connection.release();
       responseJSON(res, result);
-
     }
 
     getMyList().catch((result) => {

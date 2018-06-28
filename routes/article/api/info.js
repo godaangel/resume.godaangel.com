@@ -3,7 +3,7 @@ var router = express.Router();
 
 var mysql = require('mysql');
 var dbConfig = require('../../../db/DBConfig');
-var resumeSql = require('../../../db/resume/resumeSql');
+var articleSql = require('../../../db/article/articleSql');
 
 var pool = mysql.createPool(dbConfig.mysql);
 var responseJSON = function(res, ret) {
@@ -20,8 +20,7 @@ router.post('/', function(req, res, next) {
   pool.getConnection(function(err, connection) {
     var param = req.body;
     var timestamp = new Date().getTime();
-    connection.query(resumeSql.getResumeById, [param.id], function(err, result) {
-      // console.log(result)
+    connection.query(articleSql.getArticleById, [param.id], function(err, result) {
       if (result) {
         var result_info = result[0];
         result = {

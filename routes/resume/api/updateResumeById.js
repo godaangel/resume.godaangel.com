@@ -30,8 +30,8 @@ router.post('/', function(req, res, next) {
           }
         };
       }
-      responseJSON(res, result);
       connection.release();
+      responseJSON(res, result);
     });
   });
 });
